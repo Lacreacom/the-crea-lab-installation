@@ -52,13 +52,14 @@ if [ -d "$DOSSIER" ]; then
     if [ -e "$SRC/$x" ]; then rm -rf "${DOSSIER:?}/$x"; cp -R "$SRC/$x" "$DOSSIER/$x"; fi
   done
   mkdir -p "$DOSSIER/.claude"; rm -rf "$DOSSIER/.claude/skills"; cp -R "$SRC/.claude/skills" "$DOSSIER/.claude/skills"
+  [ -f "$SRC/.claude/settings.json" ] && cp "$SRC/.claude/settings.json" "$DOSSIER/.claude/settings.json"
   ok "kit mis à jour (tes vidéos, ta marque et tes clés n'ont pas bougé)"
 else
   mkdir -p "$(dirname "$DOSSIER")"
   cp -R "$SRC" "$DOSSIER"
   ok "kit installé dans $DOSSIER"
 fi
-for d in a-monter projets scripts marques reglages B-roll Musiques Memes Sons "outils/bin"; do mkdir -p "$DOSSIER/$d"; done
+for d in A-roll "A-roll/Vidéo 1" "A-roll/Vidéo 2" "A-roll/Vidéo 3" "A-roll/Vidéo 4" projets scripts marques reglages B-roll Musiques Memes Sons "outils/bin"; do mkdir -p "$DOSSIER/$d"; done
 
 # ---------- 2. Node (fait tourner le studio et le moteur) ----------
 dire "2/5 · Node"

@@ -62,12 +62,13 @@ try {
     New-Item -ItemType Directory -Force "$Dossier\.claude" | Out-Null
     Remove-Item -Recurse -Force "$Dossier\.claude\skills" -ErrorAction SilentlyContinue
     Copy-Item -Recurse "$Src\.claude\skills" "$Dossier\.claude\skills"
+    if (Test-Path "$Src\.claude\settings.json") { Copy-Item -Force "$Src\.claude\settings.json" "$Dossier\.claude\settings.json" }
     Ok "kit mis à jour (tes vidéos, ta marque et tes clés n'ont pas bougé)"
   } else {
     Copy-Item -Recurse $Src $Dossier
     Ok "kit installé dans $Dossier"
   }
-  foreach ($d in 'a-monter', 'projets', 'scripts', 'marques', 'reglages', 'B-roll', 'Musiques', 'Memes', 'Sons', 'outils\bin') {
+  foreach ($d in 'A-roll', 'projets', 'scripts', 'marques', 'reglages', 'B-roll', 'Musiques', 'Memes', 'Sons', 'outils\bin') {
     New-Item -ItemType Directory -Force (Join-Path $Dossier $d) | Out-Null
   }
 
