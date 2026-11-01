@@ -48,7 +48,7 @@ fi
 [ -f "$SRC/CLAUDE.md" ] || stop "Le kit téléchargé est incomplet. Retélécharge-le dans ton espace The Crea Lab."
 if [ -d "$DOSSIER" ]; then
   # mise à jour : on remplace le programme, jamais ses fichiers à elle
-  for x in moteur studio polices CLAUDE.md README.md LICENCE.md MENTIONS-TIERCES.md package.json produit.json install.sh install.ps1; do
+  for x in moteur studio polices CLAUDE.md README.md LICENCE.md MENTIONS-TIERCES.md package.json produit.json install.sh install.ps1 codex.sh codex.ps1; do
     if [ -e "$SRC/$x" ]; then rm -rf "${DOSSIER:?}/$x"; cp -R "$SRC/$x" "$DOSSIER/$x"; fi
   done
   mkdir -p "$DOSSIER/.claude"; rm -rf "$DOSSIER/.claude/skills"; cp -R "$SRC/.claude/skills" "$DOSSIER/.claude/skills"

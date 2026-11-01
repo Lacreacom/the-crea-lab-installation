@@ -53,7 +53,7 @@ try {
   if (-not $Src -or -not (Test-Path "$Src\CLAUDE.md")) { Arreter 'Le kit téléchargé est incomplet. Retélécharge-le dans ton espace The Crea Lab.' }
   if (Test-Path $Dossier) {
     # mise à jour : on remplace le programme, jamais ses fichiers à elle
-    foreach ($x in 'moteur', 'studio', 'polices', 'CLAUDE.md', 'README.md', 'LICENCE.md', 'MENTIONS-TIERCES.md', 'package.json', 'produit.json', 'install.sh', 'install.ps1') {
+    foreach ($x in 'moteur', 'studio', 'polices', 'CLAUDE.md', 'README.md', 'LICENCE.md', 'MENTIONS-TIERCES.md', 'package.json', 'produit.json', 'install.sh', 'install.ps1', 'codex.sh', 'codex.ps1') {
       if (Test-Path "$Src\$x") {
         Remove-Item -Recurse -Force "$Dossier\$x" -ErrorAction SilentlyContinue
         Copy-Item -Recurse "$Src\$x" "$Dossier\$x"
