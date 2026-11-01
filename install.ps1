@@ -53,6 +53,11 @@ try {
   if (-not $Src -or -not (Test-Path "$Src\CLAUDE.md")) { Arreter 'Le kit téléchargé est incomplet. Retélécharge-le dans ton espace The Crea Lab.' }
   if (Test-Path $Dossier) {
     # mise à jour : on remplace le programme, jamais ses fichiers à elle
+    # le studio tourne peut-être encore avec l'ancienne version : on l'arrête, Claude le relancera
+    try {
+      Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Where-Object { $_.CommandLine -like '*serveur.mjs*' } |
+        ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+    } catch { }
     foreach ($x in 'moteur', 'studio', 'polices', 'CLAUDE.md', 'README.md', 'LICENCE.md', 'MENTIONS-TIERCES.md', 'package.json', 'produit.json', 'install.sh', 'install.ps1', 'codex.sh', 'codex.ps1') {
       if (Test-Path "$Src\$x") {
         Remove-Item -Recurse -Force "$Dossier\$x" -ErrorAction SilentlyContinue
