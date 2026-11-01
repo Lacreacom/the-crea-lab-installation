@@ -113,6 +113,9 @@ try {
   }
   if (-not (Test-Path "$Bin\yt-dlp.exe")) { Telecharger 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe' "$Bin\yt-dlp.exe" }
   Ok 'yt-dlp prêt'
+  # cloudflared : le lien direct vers la vidéo originale, pour la programmer sur Metricool sans compression
+  if (-not (Test-Path "$Bin\cloudflared.exe")) { Telecharger 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe' "$Bin\cloudflared.exe" }
+  Ok 'partage Metricool prêt'
 
   # pour que Claude trouve node, ffmpeg et claude dans chaque nouvelle fenêtre
   $Chemins = @($Bin, "$Outils\node", $LocalBin)

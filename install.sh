@@ -99,6 +99,13 @@ if [ ! -x "$OUTILS/bin/yt-dlp" ]; then
   chmod +x "$OUTILS/bin/yt-dlp"; xattr -d com.apple.quarantine "$OUTILS/bin/yt-dlp" 2>/dev/null || true
 fi
 ok "yt-dlp prêt"
+# cloudflared : le lien direct vers la vidéo originale, pour la programmer sur Metricool sans compression
+if [ ! -x "$OUTILS/bin/cloudflared" ]; then
+  telecharger "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-$PUCE.tgz" "$TMP/cloudflared.tgz"
+  tar -xzf "$TMP/cloudflared.tgz" -C "$OUTILS/bin" cloudflared
+  chmod +x "$OUTILS/bin/cloudflared"; xattr -d com.apple.quarantine "$OUTILS/bin/cloudflared" 2>/dev/null || true
+fi
+ok "partage Metricool prêt"
 
 # pour que Claude trouve node, ffmpeg et claude dans chaque nouvelle fenêtre
 for f in $PROFILS; do
