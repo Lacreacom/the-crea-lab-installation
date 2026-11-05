@@ -15,6 +15,9 @@ $Telechargements = if ($env:CREALAB_TELECHARGEMENTS) { $env:CREALAB_TELECHARGEME
   try { (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path } catch { Join-Path $env:USERPROFILE 'Downloads' }
 }
 $Dossier = if ($env:CREALAB_DOSSIER) { $env:CREALAB_DOSSIER } else { Join-Path ([Environment]::GetFolderPath('Desktop')) 'The Crea Lab' }
+# Bureau dans OneDrive : ses vidéos rempliraient OneDrive (5 Go gratuits) et la synchro bloque les fichiers pendant le montage.
+# Une nouvelle installation va donc dans son dossier personnel (une installation déjà faite reste où elle est)
+if (-not $env:CREALAB_DOSSIER -and $Dossier -match 'OneDrive' -and -not (Test-Path $Dossier)) { $Dossier = Join-Path $env:USERPROFILE 'The Crea Lab' }
 $Outils = Join-Path $Dossier 'outils'
 $Bin = Join-Path $Outils 'bin'
 $LocalBin = Join-Path $env:USERPROFILE '.local\bin'
@@ -29,7 +32,8 @@ function Telecharger($url, $vers) {
   try { Invoke-WebRequest -UseBasicParsing $url -OutFile $vers }
   catch { Arreter "Le téléchargement a échoué ($url). Vérifie ta connexion internet et relance la commande." }
 }
-function Connectee { try { (& $Claude auth status 2>$null | Out-String) -match '"loggedIn":\s*true' } catch { $false } }
+# PowerShell 5.1 : avec « Stop », une ligne d'avertissement de Claude ferait croire qu'elle n'est pas connectée
+function Connectee { $ErrorActionPreference = 'Continue'; try { (& $Claude auth status 2>&1 | Out-String) -match '"loggedIn":\s*true' } catch { $false } }
 
 try {
   Write-Host "`n The Crea Lab · installation (5 à 10 minutes)"
@@ -80,7 +84,8 @@ try {
   # ---------- 2. Node (fait tourner le studio et le moteur) ----------
   Dire '2/5 · Node'
   $Node = Get-Command node -ErrorAction SilentlyContinue
-  if ($Node -and [int]((& node -v).TrimStart('v').Split('.')[0]) -ge 20) {
+  # le moteur a besoin de Node 22 ou plus (un Node plus ancien déjà installé ne suffit pas)
+  if ($Node -and [int]((& node -v).TrimStart('v').Split('.')[0]) -ge 22) {
     Ok "déjà installé ($(& node -v))"
   } else {
     $Base = 'https://nodejs.org/dist/latest-v24.x'
@@ -131,6 +136,7 @@ try {
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) { Arreter "Il manque Git. Installe-le depuis https://git-scm.com/download/win puis relance la commande." }
     Write-Host '  Installation de Git (si Windows te demande l''autorisation, clique sur Oui)…'
     winget install --id Git.Git -e --source winget --silent --accept-package-agreements --accept-source-agreements | Out-Null
+    if (-not (Test-Path "$env:ProgramFiles\Git\bin\bash.exe")) { Arreter "Git ne s'est pas installé (as-tu cliqué sur Oui ?). Relance la commande, ou installe-le depuis https://git-scm.com/download/win." }
     Ok 'Git installé'
   }
   if (Test-Path $Claude) {
@@ -155,6 +161,10 @@ try {
   }
 
   Write-Host "`nC'est installé !`n" -ForegroundColor Green
+  Write-Host '  IMPORTANT : si l''application Claude est déjà ouverte, quitte-la complètement'
+  Write-Host '  (clic droit sur son icône en bas à droite, près de l''heure, puis Quitter), puis rouvre-la.'
+  Write-Host "  Sinon, elle ne trouve pas les outils qu'on vient d'installer.`n"
+  Write-Host "  Ton dossier : $Dossier`n"
   Write-Host '  Ouvre l''application Claude, onglet « Code », choisis le dossier « The Crea Lab »'
   Write-Host "  et écris : « Ouvre mon studio ».`n"
   Start-Process explorer.exe $Dossier
