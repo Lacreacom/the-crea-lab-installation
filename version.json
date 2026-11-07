@@ -1,15 +1,12 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "nouveautes": [
-    "Tes covers à ta DA : montre tes covers (Canva, captures) une fois, Claude dessine ensuite chaque cover comme toi",
-    "Sur PC aussi : le hook et les mots géants passent derrière toi, la fenêtre de ton écran aussi, et le nouveau décor marche",
-    "Le hook derrière ta tête, en grand, en 9:16",
-    "La musique s'entend enfin, avec 3 boutons de volume : douce, normale, présente",
-    "Choisis les B-rolls de chaque vidéo",
-    "Studio d'enregistrement : la barre du micro, une alerte si on ne t'entend pas, la voix off et les cases {{…}} à remplir",
-    "Un bouton « Arrêter » pendant un montage, et « Me connecter à Claude » dans Réglages",
-    "Quand ta vidéo est prête, son lien arrive dans ta discussion avec Claude",
-    "/identite (ou /brand) : ta charte vidéo, créée et validée avec Claude",
-    "Moins de retours : sous-titres jamais sur ta bouche, effets calés sur ce que tu dis, une seule chose à la fois, couleur naturelle, 60 s max"
+    "Chaque vidéo a ses propres animations, inventées pour ce que tu dis : un vrai message WhatsApp qui arrive, une notification iPhone, Mémos vocaux, une appli de montage… Plus jamais le même montage",
+    "Une bibliothèque de 7 musiques façon film (piano, épique, jazz, lo-fi), prêtes tout de suite",
+    "🎧 Mon style musical : décris ce que tu aimes, écoute les essais sous ta voix, garde tes préférées. Elles passent avant les autres dans tes montages",
+    "Choisis la musique de ta vidéo en un clic dans le studio (tu l'écoutes avant)",
+    "Changer de hook ne change que le hook : ton style et tout ton montage restent pareils",
+    "Tes prises déjà montées se rangent toutes seules dans A-roll/Archivées",
+    "Le studio travaille avec ton modèle Claude habituel, et Claude va plus vite (mode d'emploi plus léger)"
   ]
 }
