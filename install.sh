@@ -32,8 +32,10 @@ printf '\n\033[1m The Crea Lab · installation\033[0m (5 à 10 minutes)\n'
 dire "1/5 · Le kit"
 # le plus récent des the-crea-lab*.zip, ou des dossiers the-crea-lab* déjà ouverts
 plus_recent() { local m=0 r="" f t; while IFS= read -r -d '' f; do t=$(stat -f %m "$f"); if [ "$t" -gt "$m" ]; then m=$t; r=$f; fi; done; printf '%s\t%s' "$m" "$r"; }
-Z="$(find "$TELECHARGEMENTS" -maxdepth 1 -iname 'the-crea-lab*.zip' -print0 2>/dev/null | plus_recent)"
-O="$(find "$TELECHARGEMENTS" -maxdepth 3 -ipath '*the-crea-lab*/moteur/montage.mjs' -print0 2>/dev/null | plus_recent)"
+# un Téléchargements bloqué par le Mac (ou un sous-dossier illisible) ne doit jamais tout arrêter en silence
+ls "$TELECHARGEMENTS" >/dev/null 2>&1 || stop "Ton Mac bloque l'accès du Terminal à tes Téléchargements. Va dans Réglages Système, Confidentialité et sécurité, Accès complet au disque, active Terminal, quitte le Terminal, rouvre-le et relance la commande."
+Z="$( { find "$TELECHARGEMENTS" -maxdepth 1 -iname 'the-crea-lab*.zip' -print0 2>/dev/null || true; } | plus_recent)"
+O="$( { find "$TELECHARGEMENTS" -maxdepth 3 -ipath '*the-crea-lab*/moteur/montage.mjs' -print0 2>/dev/null || true; } | plus_recent)"
 if [ -n "${CREALAB_ZIP:-}" ]; then
   telecharger "$CREALAB_ZIP" "$TMP/kit.zip"; Z="1	$TMP/kit.zip"; O="0	"
 fi
@@ -46,6 +48,8 @@ else
   stop "Je ne trouve pas le kit. Télécharge d'abord the-crea-lab.zip dans ton espace The Crea Lab (leçon « Installation »), puis relance la commande."
 fi
 [ -f "$SRC/CLAUDE.md" ] || stop "Le kit téléchargé est incomplet. Retélécharge-le dans ton espace The Crea Lab."
+V="$(sed -n 's/.*"version" *: *"\([^"]*\)".*/\1/p' "$SRC/produit.json" 2>/dev/null | head -1)"
+[ -n "$V" ] && ok "kit trouvé : version $V (si ce n'est pas la dernière, retélécharge le kit dans ton espace)"
 if [ -d "$DOSSIER" ]; then
   # mise à jour : on remplace le programme, jamais ses fichiers à elle
   # le studio tourne peut-être encore avec l'ancienne version : on l'arrête, Claude le relancera
@@ -130,7 +134,13 @@ if "$CLAUDE" auth status </dev/null 2>/dev/null | grep -Eq '"loggedIn": *true'; 
   ok "déjà connectée"
 else
   printf '  Une page va s'"'"'ouvrir dans ton navigateur.\n  Connecte-toi avec le compte de ton abonnement Claude, puis clique sur « Autoriser ».\n  Si on te donne un code, copie-le et colle-le ici, puis appuie sur Entrée.\n\n'
-  "$CLAUDE" auth login < /dev/tty || stop "La connexion n'a pas abouti. Relance la commande : tout ce qui est déjà installé sera gardé."
+  # avec « curl … | bash », l'entrée est le tuyau : on branche la connexion sur SON Terminal.
+  # Le vrai appareil (/dev/ttys003…), pas /dev/tty : sur certains Mac, Claude Code refuse /dev/tty (« EINVAL … kqueue »).
+  CLAVIER=/dev/tty
+  T="$(ps -o tty= -p $$ 2>/dev/null | tr -d ' ')"
+  case "$T" in ''|'?'|'??') ;; *) [ -r "/dev/$T" ] && CLAVIER="/dev/$T" ;; esac
+  connexion() { if [ -t 0 ]; then "$CLAUDE" auth login; else "$CLAUDE" auth login < "$CLAVIER"; fi; }
+  connexion || stop "La connexion n'a pas abouti. Relance la commande : tout ce qui est déjà installé sera gardé."
   "$CLAUDE" auth status </dev/null 2>/dev/null | grep -Eq '"loggedIn": *true' || stop "La connexion n'a pas abouti. Relance la commande."
   ok "connectée"
 fi
