@@ -1,12 +1,11 @@
 {
-  "version": "0.5.1",
+  "version": "0.5.2",
   "nouveautes": [
-    "Julie, ton experte Lab : une bulle sur chaque page du studio. Pose ta question en écrivant, à la voix ou avec une capture d'écran. Pour tes idées de vidéos, elle te passe LOU",
-    "Tes carrousels et tes storys en images, créés dans ton studio, à ta marque",
-    "Ton calendrier de contenus : tes vidéos, carrousels, storys et scripts au mois ou à la semaine, avec leur étape (idée, script, tourné, monté, programmé, publié). Glisse-les pour changer la date",
-    "Ta semaine sur l'accueil, avec la cover de chaque contenu programmé sur Metricool",
-    "Un menu plus simple, comme un site : Accueil, Calendrier, Carrousels, Storys et « + Créer »",
-    "Le mode clair ou sombre en un clic",
-    "Pour les prochaines versions : écris « mets à jour mon studio » à Julie, elle s'occupe de tout"
+    "Nouveau : « 🔁 Reprendre un carrousel qui marche ». Colle le lien d’un carrousel Instagram qui cartonne : Claude écrit le tien slide par slide, avec tes mots, sans rien copier",
+    "Ton idée ou ton script est dans Notion ? Écris juste « reprends mon script Notion sur… » : Claude va le lire, plus de copier-coller",
+    "Programmer sur Metricool marche partout où tu es : l'heure que tu choisis est celle de l'endroit où tu te trouves, même en voyage",
+    "Fini le faux message « Metricool n'a pas accepté » : quand ton post est bien programmé, ton studio affiche « Programmé ✓ »",
+    "Si Metricool refuse vraiment, ton studio te dit pourquoi, en mots simples",
+    "Choisis une heure au moins 10 minutes plus tard : programmer prend quelques minutes"
   ]
 }
